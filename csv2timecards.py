@@ -99,6 +99,7 @@ def csv_to_pdf_cards(csv_file, pdf_file):
     
     story = []
     cards_per_page = 6
+    empty_cards = 0
     
     # Process data in chunks of 6
     for i in range(0, len(records), cards_per_page):
@@ -107,6 +108,7 @@ def csv_to_pdf_cards(csv_file, pdf_file):
         # this avoids wasting card stock by filling out the rest of the last sheet with an empty card to fill out by hand
         while len(chunk) < cards_per_page:
             chunk.append(EmptyCard)
+            empty_cards+=1
 
         # Format each record into a Paragraph flowable
         # formatted_cards = [format_record(r, card_style) for r in chunk]
@@ -135,6 +137,8 @@ def csv_to_pdf_cards(csv_file, pdf_file):
             story.append(PageBreak())
             
     doc.build(story)
+
+    print(f"\n\033[33mProcessing Complete...\n\n {len(records)+empty_cards} total \033[30m({empty_cards} empty)\033[0m time cards generated to \033[1;92m{pdf_file}\033[0m\n\n")
 
 def main():
     # Initialize the parser
@@ -195,6 +199,3 @@ def main():
 if __name__ == "__main__":
     
     main()
-
-
-    #csv_to_pdf_cards("cchsharks_entries.csv", "output4.pdf")
