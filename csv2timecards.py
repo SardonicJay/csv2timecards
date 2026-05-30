@@ -14,6 +14,14 @@ MeetDate = "6/1/2026"
 TeamName = "CCH Sharks"
 PoolUnits = "SCM"
 
+EmptyCard = {'EventNumber': '___', 
+             'Heat': math.nan, 'Lane': math.nan, 
+             'AgeGroupName': 'Grp:___________',
+             'Distance': 'Dst:___', 'Stroke': 'Strk:________', 
+             'AthleteName': 'Name:________________', 'AthleteAge': '', 
+             'SeedTimeConverted': '______', 'SeedTimeUnconverted': '_____', 
+             'IsExhibition': False, 'IndOrRelay': 'I'}
+
 
 def format_record(pos, row_dict, style):
     card_text = ""
@@ -96,11 +104,14 @@ def csv_to_pdf_cards(csv_file, pdf_file):
     for i in range(0, len(records), cards_per_page):
         chunk = records[i:i + cards_per_page]
 
+        # this avoids wasting card stock by filling out the rest of the last sheet with an empty card to fill out by hand
+        while len(chunk) < cards_per_page:
+            chunk.append(EmptyCard)
+
         # Format each record into a Paragraph flowable
         # formatted_cards = [format_record(r, card_style) for r in chunk]
         formatted_cards = []
         for p, r in enumerate(chunk):
-            print(p)
             formatted_cards.append(format_record(p, r, card_style))
         
         # Pad the chunk with empty paragraphs if it has fewer than 6 records

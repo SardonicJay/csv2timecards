@@ -1,0 +1,9 @@
+EventNumber,Heat,Lane,AgeGroupName,Distance,Stroke,AthleteName,AthleteAge,SeedTimeConverted,SeedTimeUnconverted,IsExhibition,IndOrRelay
+7,,,11-12 Boys,50,Freestyle,"Doe, John",12,43.21S,43.21S,FALSE,I
+27,,,11-12 Boys,50,Butterfly,"Doe, John",12,46.93S,46.93S,FALSE,I
+41,,,11-12 Boys,100,Individual Medley,"Doe, John",12,1.32.96S,1.32.96S,FALSE,I
+9,,,13-18 Boys,50,Freestyle,"Doe, Jim",14,29.42S,29.42S,FALSE,I
+29,,,13-18 Boys,50,Breaststroke,"Doe, Jim",14,42.12S,42.12S,FALSE,I
+43,,,13-18 Boys,100,Individual Medley,"Doe, Jim",14,1:17.97S,1:17.97S,FALSE,I
+10,,,13-18 Girls,50,Freestyle,"Doe, Jane",13,38.52S,38.52S,FALSE,I
+20,,,13-18 Girls,50,Backstroke,"Doe, Jane",13,49.16S,49.16S,FALSE,I
