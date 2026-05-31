@@ -8,11 +8,27 @@ from reportlab.lib import colors
 
 import argparse
 import os
+import json
 
 MeetName = "Swim Meet"
 MeetDate = "6/1/2026"
 TeamName = "Team Name"
 PoolUnits = "SCM"
+
+#text coloring
+RESET = "\033[0m"
+
+RED = "\033[31m"
+GREEN = "\033[32m"
+YELLOW = "\033[33m"
+BLUE = "\033[34m"
+MAGENTA = "\033[35m"
+CYAN = "\033[36m"
+
+BOLD = "\033[1;"
+BOLD_RED = "\033[1;31m"
+BOLD_GREEN = "\033[1;32m"
+BOLD_YELLOW = "\033[1;33m"
 
 EmptyCard = {'EventNumber': '___', 
              'Heat': math.nan, 'Lane': math.nan, 
@@ -138,7 +154,8 @@ def csv_to_pdf_cards(csv_file, pdf_file):
             
     doc.build(story)
 
-    print(f"\n\033[33mProcessing Complete...\n\n {len(records)+empty_cards} total \033[30m({empty_cards} empty)\033[0m time cards generated to \033[1;92m{pdf_file}\033[0m\n\n")
+    print(f"\n{BOLD_YELLOW}Processing Complete...{RESET}\n\n {MAGENTA}{len(records)+empty_cards} total {CYAN}({empty_cards} empty){RESET} time cards generated to {BOLD_GREEN}{pdf_file}{RESET}\n\n")
+    
 
 def main():
     # Initialize the parser
@@ -151,17 +168,32 @@ def main():
     parser.add_argument("-o", "--out", type=str, default=None, help="Time Card pdf format [6 cards per sheet] -- defaults to [meet]_[date]_[team].pdf if not defined")
 
     # pool units -- SCM by default
-    parser.add_argument("-u", "--units", type=str, default="SCM", help="Pool length units [SCM|SCY|LCM]")
+    parser.add_argument("-u", "--units", type=str, default=None, help="Pool length units [SCM|SCY|LCM]")
     
     # meet name
-    parser.add_argument("-m", "--meet", type=str, default="Time Trials", help="Meet Name")
+    parser.add_argument("-m", "--meet", type=str, default=None, help="Meet Name")
 
     # meet date
-    parser.add_argument("-d", "--date", type=str, default=datetime.now().strftime("%Y-%m-%d"), help="Meet Date")
+    #parser.add_argument("-d", "--date", type=str, default=datetime.now().strftime("%Y-%m-%d"), help="Meet Date")
+    parser.add_argument("-d", "--date", type=str, default=None, help="Meet Date")
 
     # team name
-    parser.add_argument("-t", "--team", type=str, default="CCH Sharks", help="Team Name")
+    parser.add_argument("-t", "--team", type=str, default=None, help="Team Name")
 
+
+    # apply config file values if it exists
+    config = None
+    cfg_file = os.path.splitext(os.path.abspath(__file__))[0]+".cfg"
+    try:
+        if os.path.isfile(cfg_file):
+            with open(cfg_file, 'r') as cfg:
+                config = json.load(cfg)
+    except:
+        print(f"\n{BOLD_RED}ERROR:{RESET} with loading cfg file {YELLOW}{cfg_file}{RESET} check formatting.  bypassing config....")
+        config = None
+
+    if config:
+        parser.set_defaults(**config)
 
     # Parse the arguments
     args = parser.parse_args()
@@ -170,28 +202,47 @@ def main():
 
     # in_csv_entries
     if not os.path.isfile(args.in_csv_entries):
-        print(f"\n\033[1;31mERROR:\033[0m input file \033[1;33m{args.in_csv_entries}\033[0m does not exist. Check your file path.")
+        print(f"\n{BOLD_RED}ERROR:{RESET} input file {BOLD}{YELLOW}{args.in_csv_entries}{RESET} does not exist. Check your file path.")
         print("exiting...\n")
         return
+    
+    # team name
+    if not args.team:
+        args.team = input(f"\nEnter Team Name [default: {GREEN}Team{RESET}]: ") or "Team"
+
+    # meet name
+    if not args.meet:
+        args.meet = input(f"\nEnter Meet Name [default: {GREEN}Meet{RESET}]: ") or "Meet"
+
+    # meet date
+    if not args.date:
+        args.date = input(f"\nEnter Meet Date [default: {GREEN}{datetime.now().strftime("%Y-%m-%d")}{RESET}]: ") or datetime.now().strftime("%Y-%m-%d")
     
     # pool units
+    if not args.units:
+        args.units = input(f"\nEnter Pool Units [valid: {GREEN}SCM|SCY|LCM{RESET} default: {GREEN}SCM{RESET}]: ") or "SCM"
     if not args.units in ["SCM","LCM","SCY"]:
-        print(f"\n\033[1;31mERROR:\033[0m pool units \033[1;33m{args.units}\033[0m invalid [SCM,SCY,LCM]. ")
+        print(f"\n{BOLD_RED}ERROR:{RESET} pool units {RED}{args.units}{RESET} invalid. [valid: {GREEN}SCM|SCY|LCM{RESET}]. ")
         print("exiting...\n")
         return
     
-    # rest of arguments are basically strings and can be whatever you want so no validation necessary
-
     global PoolUnits, MeetName, MeetDate, TeamName
     PoolUnits = args.units
     MeetName = args.meet
     MeetDate = args.date
     TeamName = args.team
 
+    print(f"\n{BOLD_YELLOW}Team Name: {RESET}{CYAN}{TeamName}{RESET}")
+    print(f"{BOLD_YELLOW}Meet Name: {RESET}{CYAN}{MeetName}{RESET}")
+    print(f"{BOLD_YELLOW}Meet Date: {RESET}{CYAN}{MeetDate}{RESET}")
+    print(f"{BOLD_YELLOW}Pool Units: {RESET}{CYAN}{PoolUnits}{RESET}")
+
     if not args.out:
         outfile = f"{MeetName}_{MeetDate}_{TeamName}.pdf".replace(" ", "").replace("-", "").replace("/", "").replace("\\", "")
         dir_name = os.path.dirname(args.in_csv_entries)
-        args.out = os.path.join(dir_name, outfile)
+        outfileFullPath = os.path.join(dir_name, outfile)
+
+        args.out = input(f"\nEnter Time Card Output File [default: {GREEN}{outfileFullPath}{RESET}]: ") or outfileFullPath
 
 
     csv_to_pdf_cards(args.in_csv_entries, args.out)
