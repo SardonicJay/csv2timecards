@@ -11,7 +11,7 @@ import os
 
 MeetName = "Swim Meet"
 MeetDate = "6/1/2026"
-TeamName = "CCH Sharks"
+TeamName = "Team Name"
 PoolUnits = "SCM"
 
 EmptyCard = {'EventNumber': '___', 
