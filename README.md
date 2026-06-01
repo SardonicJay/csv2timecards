@@ -5,7 +5,7 @@ Export from Swimtopia...
 
 *[Reports » Meet Entries by Event]* exported as a csv.
 
-Outputs a pdf file that is printable on standard card stock (6 per page).  Any incomplete page will be filled with blank cards to be used at the meet for scratches and late adds.
+Outputs a pdf file to same directory as the input csv that is printable on standard card stock (6 per page).  Any incomplete page will be filled with blank cards to be used at the meet for scratches and late adds.
 
 
 # python libraries
