@@ -21,17 +21,26 @@ pip install pyinstaller
 `python .\csv2timecards.py`
 
 # create a standalone executable from python script
-`pyinstaller --onefile .\csv2timecards.py`
+-- writes to the `dist` subdirectory
+
+```
+pyinstaller --onefile .\csv2timecards.py
+dist\csv2timecards.exe
+```
 
 # Executing
 
+<font color=green>For easiest results keep all your files (executable, configs, and csv entries) in the same directory</font>
+
 ## guided input
-Drop the Swimtopia Entry report on the executable to start a guided user input process to generate your time cards.
+Drag & Drop the Swimtopia Entry report on the executable to start a guided user input process to generate your time cards.
 
 ## config file
-`csv2timecards.cfg` -- must reside in same directory as executable
-json configuration to set defaults
-Bypass repetitive user prompting for unchanging values like team and pool length (units).
+`csv2timecards.cfg` 
+* json configuration to set defaults
+* Bypass repetitive user prompting for unchanging values like team and pool length (units).
+
+NOTE: due to the way in which the python is packaged into the executable, the config file must reside the the same directory as your csv entries when dragging & dropping.
 
 example: 
 ```
