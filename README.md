@@ -9,7 +9,7 @@ Outputs a pdf file that is printable on standard card stock (6 per page).  Any i
 
 
 # python libraries
-`uv` may be necessary to install in Windows
+`uv` may be necessary to install on Windows
 ```
 pip install numpy
 pip install pandas
