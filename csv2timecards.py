@@ -186,7 +186,6 @@ def main():
     config = None
     #cfg_file = os.path.splitext(os.path.abspath(__file__))[0]+".cfg"
     cfg_file = "csv2timecards.cfg"
-    print(cfg_file)
     try:
         if os.path.isfile(cfg_file):
             with open(cfg_file, 'r') as cfg:
