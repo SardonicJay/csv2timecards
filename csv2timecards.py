@@ -154,8 +154,9 @@ def csv_to_pdf_cards(csv_file, pdf_file):
             
     doc.build(story)
 
-    print(f"\n{BOLD_YELLOW}Processing Complete...{RESET}\n\n {MAGENTA}{len(records)+empty_cards} total {CYAN}({empty_cards} empty){RESET} time cards generated to {BOLD_GREEN}{pdf_file}{RESET}\n\n")
+    print(f"\n{BOLD_YELLOW}Processing Complete...{RESET}\n\n {MAGENTA}{len(records)+empty_cards} total {CYAN}({empty_cards} empty){RESET} time cards generated to {BOLD_GREEN}{pdf_file}{RESET}\n")
     
+    input("Press Enter to exit...")
 
 def main():
     # Initialize the parser
@@ -183,7 +184,9 @@ def main():
 
     # apply config file values if it exists
     config = None
-    cfg_file = os.path.splitext(os.path.abspath(__file__))[0]+".cfg"
+    #cfg_file = os.path.splitext(os.path.abspath(__file__))[0]+".cfg"
+    cfg_file = "csv2timecards.cfg"
+    print(cfg_file)
     try:
         if os.path.isfile(cfg_file):
             with open(cfg_file, 'r') as cfg:
@@ -203,7 +206,7 @@ def main():
     # in_csv_entries
     if not os.path.isfile(args.in_csv_entries):
         print(f"\n{BOLD_RED}ERROR:{RESET} input file {BOLD}{YELLOW}{args.in_csv_entries}{RESET} does not exist. Check your file path.")
-        print("exiting...\n")
+        input("Press Enter to exit...")
         return
     
     # team name
@@ -223,7 +226,7 @@ def main():
         args.units = input(f"\nEnter Pool Units [valid: {GREEN}SCM|SCY|LCM{RESET} default: {GREEN}SCM{RESET}]: ") or "SCM"
     if not args.units in ["SCM","LCM","SCY"]:
         print(f"\n{BOLD_RED}ERROR:{RESET} pool units {RED}{args.units}{RESET} invalid. [valid: {GREEN}SCM|SCY|LCM{RESET}]. ")
-        print("exiting...\n")
+        input("Press Enter to exit...")
         return
     
     global PoolUnits, MeetName, MeetDate, TeamName
